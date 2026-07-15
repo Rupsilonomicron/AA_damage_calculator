@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AA ダメージ計算ツール v1.1.7</title>
+<title>AA ダメージ計算ツール v1.1.8</title>
+<!-- PWA（Web公開時のみ有効。ローカルファイルで開いた場合は無視される） -->
+<meta name="theme-color" content="#0f1117">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
 /* オフライン用 埋め込みフォント（Google Fonts latinサブセット / SIL Open Font License）
    Rajdhani 600: https://fonts.google.com/specimen/Rajdhani
@@ -359,7 +363,7 @@
       </svg>
     </div>
     <div>
-      <div class="header-title" data-i18n="app_title">AA ダメージ計算ツール v1.1.7</div>
+      <div class="header-title" data-i18n="app_title">AA ダメージ計算ツール v1.1.8</div>
     </div>
     <button class="cfg-header-btn" id="lang-btn" onclick="toggleLang()" style="margin-left:auto;font-family:var(--mono);font-size:12px" title="Language">EN</button>
     <button class="cfg-header-btn" id="tab-btn-cfg" onclick="switchTab('cfg')" style="margin-left:0">⚙</button>
@@ -1036,7 +1040,7 @@
 
   var I18N = {
     ja: {
-      app_title: 'AA ダメージ計算ツール v1.1.7',
+      app_title: 'AA ダメージ計算ツール v1.1.8',
       tab_weapon: '武器',
       tab_rank: 'ランク',
       module_dmg: 'モジュール DMG+',
@@ -1168,7 +1172,7 @@
       ss_downloaded: '画像をダウンロードしました'
     },
     en: {
-      app_title: 'AA Damage Calculator v1.1.7',
+      app_title: 'AA Damage Calculator v1.1.8',
       tab_weapon: 'Weapons',
       tab_rank: 'Ranking',
       module_dmg: 'Module DMG+',
@@ -3689,6 +3693,16 @@ function ssToast(msg) {
     else if (e.key === 'Backspace') { e.preventDefault(); fcBackspace(); }
   });
 })();
+</script>
+
+<!-- ===== PWA: Service Worker 登録 ===== -->
+<script>
+// https配信時のみ登録（file://で開いた場合は何もしない）
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function() {});
+  });
+}
 </script>
 </body>
 </html>
