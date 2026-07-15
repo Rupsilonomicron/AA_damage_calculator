@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AA ダメージ計算ツール v1.1.8</title>
+<title>AA ダメージ計算ツール v1.1.9</title>
 <!-- PWA（Web公開時のみ有効。ローカルファイルで開いた場合は無視される） -->
 <meta name="theme-color" content="#0f1117">
 <link rel="manifest" href="manifest.json">
@@ -85,11 +85,6 @@
     display: flex; align-items: center; gap: 12px;
     margin-bottom: 18px; padding-bottom: 14px;
     border-bottom: 1px solid var(--accent);
-  }
-  .header-icon {
-    width: 34px; height: 34px;
-    background: var(--accent-dim); border: 1px solid var(--accent);
-    border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .header-title { font-family: var(--head); font-size: 20px; font-weight: 600; letter-spacing: 0.06em; color: var(--text); line-height: 1; }
   .header-sub { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.08em; margin-top: 3px; }
@@ -355,15 +350,8 @@
 <div class="page-wrap">
 
   <div class="header">
-    <div class="header-icon">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <rect x="2" y="9" width="16" height="3" rx="1" fill="#e8a020"/>
-        <rect x="11" y="4" width="3" height="8" rx="1" fill="#e8a020"/>
-        <circle cx="4.5" cy="10.5" r="1.5" fill="#e8eaf0"/>
-      </svg>
-    </div>
     <div>
-      <div class="header-title" data-i18n="app_title">AA ダメージ計算ツール v1.1.8</div>
+      <div class="header-title" data-i18n="app_title">AA ダメージ計算ツール v1.1.9</div>
     </div>
     <button class="cfg-header-btn" id="lang-btn" onclick="toggleLang()" style="margin-left:auto;font-family:var(--mono);font-size:12px" title="Language">EN</button>
     <button class="cfg-header-btn" id="tab-btn-cfg" onclick="switchTab('cfg')" style="margin-left:0">⚙</button>
@@ -1040,7 +1028,7 @@
 
   var I18N = {
     ja: {
-      app_title: 'AA ダメージ計算ツール v1.1.8',
+      app_title: 'AA ダメージ計算ツール v1.1.9',
       tab_weapon: '武器',
       tab_rank: 'ランク',
       module_dmg: 'モジュール DMG+',
@@ -1172,7 +1160,7 @@
       ss_downloaded: '画像をダウンロードしました'
     },
     en: {
-      app_title: 'AA Damage Calculator v1.1.8',
+      app_title: 'AA Damage Calculator v1.1.9',
       tab_weapon: 'Weapons',
       tab_rank: 'Ranking',
       module_dmg: 'Module DMG+',
