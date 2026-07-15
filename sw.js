@@ -1,7 +1,7 @@
 // AA ダメージ計算ツール Service Worker
 // 方針：本体(index.html)はネットワーク優先＝オンラインなら常に最新版。
 //       オフライン時のみキャッシュにフォールバックする。
-var CACHE = 'aa-calc-v1';
+var CACHE = 'aa-calc-v2';  // アイコン等の静的アセット変更時はこの番号を上げる
 var PRECACHE = [
   './',
   './manifest.json',
