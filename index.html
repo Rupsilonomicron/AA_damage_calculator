@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AA ダメージ計算ツール v1.1.9</title>
+<title>AA ダメージ計算ツール v1.1.10</title>
 <!-- PWA（Web公開時のみ有効。ローカルファイルで開いた場合は無視される） -->
 <meta name="theme-color" content="#0f1117">
 <link rel="manifest" href="manifest.json">
@@ -351,7 +351,7 @@
 
   <div class="header">
     <div>
-      <div class="header-title" data-i18n="app_title">AA ダメージ計算ツール v1.1.9</div>
+      <div class="header-title" data-i18n="app_title">AA ダメージ計算ツール v1.1.10</div>
     </div>
     <button class="cfg-header-btn" id="lang-btn" onclick="toggleLang()" style="margin-left:auto;font-family:var(--mono);font-size:12px" title="Language">EN</button>
     <button class="cfg-header-btn" id="tab-btn-cfg" onclick="switchTab('cfg')" style="margin-left:0">⚙</button>
@@ -1028,7 +1028,7 @@
 
   var I18N = {
     ja: {
-      app_title: 'AA ダメージ計算ツール v1.1.9',
+      app_title: 'AA ダメージ計算ツール v1.1.10',
       tab_weapon: '武器',
       tab_rank: 'ランク',
       module_dmg: 'モジュール DMG+',
@@ -1156,11 +1156,12 @@
       loadout_del_q: '削除?',
       ss_no_lib: '⚠ html2canvas が読み込まれていません',
       ss_copied: 'クリップボードにコピーしました',
+      ss_shared: '共有しました',
       ss_failed: '⚠ キャプチャに失敗しました',
       ss_downloaded: '画像をダウンロードしました'
     },
     en: {
-      app_title: 'AA Damage Calculator v1.1.9',
+      app_title: 'AA Damage Calculator v1.1.10',
       tab_weapon: 'Weapons',
       tab_rank: 'Ranking',
       module_dmg: 'Module DMG+',
@@ -1288,6 +1289,7 @@
       loadout_del_q: 'Del?',
       ss_no_lib: '⚠ html2canvas is not loaded',
       ss_copied: 'Copied to clipboard',
+      ss_shared: 'Shared',
       ss_failed: '⚠ Capture failed',
       ss_downloaded: 'Image downloaded'
     }
@@ -3242,13 +3244,22 @@ function takeScreenshot() {
     btn.classList.remove('loading');
 
     canvas.toBlob(function(blob) {
-      if (navigator.clipboard && window.ClipboardItem) {
-        navigator.clipboard.write([new ClipboardItem({'image/png': blob})])
-          .then(function() { ssToast(t('ss_copied')); })
-          .catch(function() { ssFallbackDownload(blob); });
-      } else {
-        ssFallbackDownload(blob);
+      if (!blob) { ssToast(t('ss_failed')); return; }
+      // スマホ：OSの共有シートを開く（写真に保存・任意のアプリへ直接渡せる。
+      // クリップボードを経由しないためオフラインでも確実に画像を残せる）
+      var file = null;
+      try { file = new File([blob], 'aa-damage-calculator.png', { type: 'image/png' }); } catch(e) {}
+      if (ssIsMobile() && file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file] })
+          .then(function() { ssToast(t('ss_shared')); })
+          .catch(function(err) {
+            if (err && err.name === 'AbortError') return;  // ユーザーが共有をキャンセル
+            ssCopyToClipboard(blob);                        // 共有シートが開けない場合はコピーへ
+          });
+        return;
       }
+      // PC等：従来どおりクリップボードコピー（失敗時はダウンロード）
+      ssCopyToClipboard(blob);
     }, 'image/png');
   }).catch(function(err) {
     if (fc) fc.style.display = '';
@@ -3256,6 +3267,24 @@ function takeScreenshot() {
     btn.classList.remove('loading');
     ssToast(t('ss_failed'));
   });
+}
+
+// スマホ/タブレット判定（iPadOSはMac偽装UAのためタッチ点数でも判定）
+function ssIsMobile() {
+  if (navigator.userAgentData && navigator.userAgentData.mobile) return true;
+  if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return true;
+  if (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform || '')) return true;
+  return false;
+}
+
+function ssCopyToClipboard(blob) {
+  if (navigator.clipboard && window.ClipboardItem) {
+    navigator.clipboard.write([new ClipboardItem({'image/png': blob})])
+      .then(function() { ssToast(t('ss_copied')); })
+      .catch(function() { ssFallbackDownload(blob); });
+  } else {
+    ssFallbackDownload(blob);
+  }
 }
 
 function ssFallbackDownload(blob) {
